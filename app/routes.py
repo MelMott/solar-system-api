@@ -18,10 +18,6 @@ planets = [
 def handle_planets():
     planets_response = []
     for planet in planets:
-        planets_response.append({
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "age": planet.age
-        })
+        planets_response.append(vars(planet))
+        
     return jsonify(planets_response)
