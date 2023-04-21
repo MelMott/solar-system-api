@@ -48,7 +48,7 @@ def validate_planet(planet_id):
     except:
         abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
     for planet in planets:
-        if planet_id == planet_id:
+        if planet.id == planet_id:
             return planet
     abort(make_response({"message":f"Planet {planet.name} not found."}, 404))
         
