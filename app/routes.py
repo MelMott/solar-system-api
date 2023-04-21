@@ -17,8 +17,9 @@ planets = [
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-@planets_bp.route("/<planets_id>", methods=["GET"])
+@planets_bp.route("/<planet_id>", methods=["GET"])
 def handle_one_planet(planet_id):
+    planet = validate_planet(planet_id)
     planet_id = int(planet_id)
     for planet in planets:
         if planet.id == planet_id:
@@ -44,13 +45,13 @@ def handle_planets():
 
 def validate_planet(planet_id):
     try:
-        planet.id = int(planet_id)
+        planet_id = int(planet_id)
     except:
         abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
     for planet in planets:
         if planet.id == planet_id:
             return planet
-    abort(make_response({"message":f"Planet {planet.name} not found."}, 404))
+    abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
         
     
         
