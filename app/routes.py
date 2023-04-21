@@ -19,7 +19,7 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
 @planets_bp.route("/<planets_id>", methods=["GET"])
 def handle_one_planet(planet_id):
-    planet.id = int(planet_id)
+    planet_id = int(planet_id)
     for planet in planets:
         if planet.id == planet_id:
             return({
