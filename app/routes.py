@@ -8,7 +8,7 @@ planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 def create_planet(planet_id):
     
     request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"], surface_area=request_body["surface_area"], moons=request_body["moons"], distance_from_sun=request_body["distance_from_sun"], namesake=request_body["namesake"])
+    new_planet = Planet(name=request_body["name"], description=request_body["description"])
 
     db.session.add(new_planet)
     db.session.commit()
@@ -24,27 +24,20 @@ def read_all_planets():
             {
                 "id": planet.id,
                 "name": planet.name,
-                "surface_area": planet.surface_area,
-                "moons": planet.moons,
-                "distance_from_sun":planet.distance_from_sun,
-                "namesake": planet.namesake 
-
+                "description": planet.description
             }
         )
     return jsonify(planets_response)
 
-
-    
-
 @planets_bp.route("", methods=["GET"])
 def handle_planets():
     planets_response = []
+    planets = planet.query.all()
     for planet in planets:
         planets_response.append({
             "id": planet.id,
             "name": planet.name,
-            "description": planet.description,
-            "age": planet.age
+            "description": planet.description
         })
         
     return jsonify(planets_response), 200
