@@ -14,16 +14,27 @@ def create_planet(planet_id):
     db.session.commit()
 
     return make_response(f"Planet {new_planet.name}, succesfully created", 201)
-    # planet = validate_planet(planet_id)
-    # planet_id = int(planet_id)
-    # for planet in planets:
-    #     if planet.id == planet_id:
-    #         return({
-    #             "id": planet.id,
-    #             "name": planet.name,
-    #             "description": planet.description,
-    #             "age": planet.age
-            # })
+    
+@planets_bp.route("", methods=["GET"])
+def read_all_planets():
+    planets_response = []
+    planets = planet.query.all()
+    for planet in planets:
+        planets_response.append(
+            {
+                "id": planet.id,
+                "name": planet.name,
+                "surface_area": planet.surface_area,
+                "moons": planet.moons,
+                "distance_from_sun":planet.distance_from_sun,
+                "namesake": planet.namesake 
+
+            }
+        )
+    return jsonify(planets_response)
+
+
+    
 
 @planets_bp.route("", methods=["GET"])
 def handle_planets():
@@ -38,15 +49,15 @@ def handle_planets():
         
     return jsonify(planets_response), 200
 
-def validate_planet(planet_id):
-    try:
-        planet_id = int(planet_id)
-    except:
-        abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
-    for planet in planets:
-        if planet.id == planet_id:
-            return planet
-    abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
+# def validate_planet(planet_id):
+#     try:
+#         planet_id = int(planet_id)
+#     except:
+#         abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
+#     for planet in planets:
+#         if planet.id == planet_id:
+#             return planet
+#     abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
         
     
         
