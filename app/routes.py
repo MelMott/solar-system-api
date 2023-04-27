@@ -18,7 +18,7 @@ def create_planet(planet_id):
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
     
-    planets = planet.query.all()
+    planets = Planet.query.all()
     planets_response = []
     
     for planet in planets:
