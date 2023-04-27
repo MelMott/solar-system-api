@@ -17,8 +17,10 @@ def create_planet(planet_id):
     
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
-    planets_response = []
+    
     planets = planet.query.all()
+    planets_response = []
+    
     for planet in planets:
         planets_response.append(
             {
@@ -28,19 +30,6 @@ def read_all_planets():
             }
         )
     return jsonify(planets_response)
-
-@planets_bp.route("", methods=["GET"])
-def handle_planets():
-    planets_response = []
-    planets = planet.query.all()
-    for planet in planets:
-        planets_response.append({
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description
-        })
-        
-    return jsonify(planets_response), 200
 
 # def validate_planet(planet_id):
 #     try:
