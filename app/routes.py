@@ -62,6 +62,22 @@ def delete_one_planet(planet_id):
 
     return f"Animal #{planet_to_delete.id} successfully deleted", 200
 
+@planets_bp.route("/<book_id>", methods=["PUT"])
+def update_planet(planet_id):
+
+    planet = validate_planet(planet_id)
+    request_body = request.get_json()
+
+    if "name" not in request_body or "description" not in request_body:
+        return make_response("Invalid Request", 400)
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+
+    db.session.commit()
+
+    return make_response(f"Planet #{planet.id} suscessfully updated")
+
         
     
         
