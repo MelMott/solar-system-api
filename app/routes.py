@@ -44,15 +44,23 @@ def read_all_planets():
     return jsonify(planets_response)
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
-def get_one_book_by_id(book_id):
+def get_one_planet_by_id(planet_id):
 
     # Call validate to check if book exists-It returns a book if it exists
-    planet = validate_planet(book_id)
+    planet = validate_planet(planet_id)
     
     return {"id": planet.id,
             "name": planet.title,
             "description": planet.description}
 
+@planets_bp.route("/<planet_id>", methods=["DELETE"])
+def delete_one_planet(planet_id):
+    planet_to_delete = validate_planet(planet_id)
+
+    db.session.delete(planet_to_delete)
+    db.session.commit()
+
+    return f"Animal #{planet_to_delete.id} successfully deleted", 200
 
         
     
