@@ -31,15 +31,27 @@ def read_all_planets():
         )
     return jsonify(planets_response)
 
-# def validate_planet(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
-#     abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
+@planets_bp.route("/<planet_id>", methods=["PUT"])
+def update_one_planet(planet_id):
+    request_body = request.get_json()
+
+    planet_to_update = validate_planet(planet_id)
+
+    planet_to_update.name = request_body["name"]
+
+    db.session.commit()
+
+    return planet_to_update.to_dict(), 200
+
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
+    for planet in planets:
+        if planet.id == planet_id:
+            return planet
+    abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
         
     
         
