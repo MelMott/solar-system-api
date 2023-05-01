@@ -4,6 +4,18 @@ from flask import Blueprint,jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except:
+        abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
+
+    planet = Planet.query.get(planet_id)
+
+    if not planet:
+        return abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
+    return planet
+
 @planets_bp.route("", methods=["POST"])
 def create_planet():
     
@@ -31,15 +43,17 @@ def read_all_planets():
         )
     return jsonify(planets_response)
 
-# def validate_planet(planet_id):
-#     try:
-#         planet_id = int(planet_id)
-#     except:
-#         abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
-#     for planet in planets:
-#         if planet.id == planet_id:
-#             return planet
-#     abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def get_one_book_by_id(book_id):
+
+    # Call validate to check if book exists-It returns a book if it exists
+    planet = validate_planet(book_id)
+    
+    return {"id": planet.id,
+            "name": planet.title,
+            "description": planet.description}
+
+
         
     
         
