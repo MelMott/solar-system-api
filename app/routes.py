@@ -50,7 +50,7 @@ def get_one_planet_by_id(planet_id):
     planet = validate_planet(planet_id)
     
     return {"id": planet.id,
-            "name": planet.title,
+            "name": planet.name,
             "description": planet.description}
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
@@ -62,7 +62,7 @@ def delete_one_planet(planet_id):
 
     return f"Animal #{planet_to_delete.id} successfully deleted", 200
 
-@planets_bp.route("/<book_id>", methods=["PUT"])
+@planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
 
     planet = validate_planet(planet_id)
