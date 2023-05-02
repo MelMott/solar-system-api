@@ -30,7 +30,13 @@ def create_planet():
 @planets_bp.route("", methods=["GET"])
 def read_all_planets():
     
-    planets = Planet.query.all()
+    planet_query = request.args.get("name")
+    if planet_query:
+        planets = Planet.query.filter_by(name=planet_query)
+    else:
+        # How do I get all of the books from the DB? SQLAlchemy does it with .query.all()
+        planets = Planet.query.all()
+    
     planets_response = []
     
     for planet in planets:
