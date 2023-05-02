@@ -11,8 +11,13 @@ load_dotenv()
 def create_app(test_config=None):
     app = Flask(__name__)
 
+    if not test_config:
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config["SQUALCHEMY_DATABASE_URI"] = os.environ.get('SQUALCHEMY_DATABASE_URI')
+
+    app.config["TESTING"] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQUALCHEMY_DATABASE_URI')
 
     db.init_app(app)
     migrate.init_app(app, db)
