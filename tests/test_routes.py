@@ -1,59 +1,49 @@
-# test get all books with no records
-def test_get_all_books_with_no_records(client):
-    # Arrange is inside Conftest
-    # Act
-    response = client.get("/books")
-    response_body = response.get_json()
-
-    # Assert
-    assert response.status_code == 200
-    assert response_body == []
 
 # Get /books/1 with NO data in test database (no fixture) returns a 404
-def test_get_one_book_with_no_data(client):
+def test_get_one_planet_with_no_data(client):
     # Act
-    response = client.get("/books/1")
-    print(response)
-    print(client)
+    response = client.get("/planets/1")
 
     # Assert
     assert response.status_code == 404
 
-# Get one planet by id test
-def test_get_one_book(client, two_saved_books):
+# Get one book by id test
+def test_get_one_planet(client, three_saved_planets):
     # Act
-    response = client.get('/books/1')
+    response = client.get('/planets/1')
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 200
     assert response_body == {
         "id": 1,
-        "title": "Ocean Book",
-        "description": "watr 4evr"
+        "name": "Jupiter",
+        "description": "King of the Roman gods, aka Zeus"
     }
 
-# test Get all planets in database
-def test_get_all_books(client, two_saved_books):
+# test Get all books in database
+def test_get_all_planets(client, three_saved_planets):
     # Act
     response = client.get('/books')
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 200
-    assert response_body == [{"id": 1, "title": "Ocean Book", "description": "watr 4evr"},
-        {"id": 2, "title": "Mountain Book", "description": "i luv to climb rocks"}
+    assert response_body == [{"id": 2, "name": "Mars", "description": "Roman god of war, aka Ares"},
+        {"id": 3, "name": "Venus", "description": "Roman goddess of love, aka Aphrodite"}
         ]
 
 # Create one book
-def test_create_one_book(client):
+def test_create_one_planet(client):
     # Act
-    response = client.post("/books", json={
-        "title": "New Book",
+    response = client.post("/planets", json={
+        "name": "New planet",
         "description": "The Best!"
     })
     response_body = response.get_data(as_text=True)
 
     # Assert
     assert response.status_code == 201
-    assert response_body == "Book New Book successfully created"
+    assert response_body == "Planet New planet successfully created"
+
+
