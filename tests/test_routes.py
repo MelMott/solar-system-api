@@ -24,12 +24,12 @@ def test_get_one_planet(client, three_saved_planets):
 # test Get all books in database
 def test_get_all_planets(client, three_saved_planets):
     # Act
-    response = client.get('/books')
+    response = client.get('/planets')
     response_body = response.get_json()
 
     # Assert
     assert response.status_code == 200
-    assert response_body == [{"id": 2, "name": "Mars", "description": "Roman god of war, aka Ares"},
+    assert response_body == [{"id":1, "name":"Jupiter", "description":"King of the Roman gods, aka Zeus"},{"id": 2, "name": "Mars", "description": "Roman god of war, aka Ares"},
         {"id": 3, "name": "Venus", "description": "Roman goddess of love, aka Aphrodite"}
         ]
 
@@ -44,6 +44,6 @@ def test_create_one_planet(client):
 
     # Assert
     assert response.status_code == 201
-    assert response_body == "Planet New planet successfully created"
+    assert response_body == "Planet New planet, succesfully created"
 
 
