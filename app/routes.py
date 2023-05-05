@@ -40,14 +40,24 @@ def read_all_planets():
     planets_response = []
     
     for planet in planets:
-        planets_response.append(
-            {
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description
-            }
-        )
-    return jsonify(planets_response)
+        planets_response.append(planet.to_dict())
+        # Below is what we have previously, I changed it to_dict per lesson)
+        # planets_response.append(
+        #     {
+        #         "id": planet.id,
+        #         "name": planet.name,
+        #         "description": planet.description
+        #     }
+        # )
+    return jsonify(planets_response), 200
+
+#changes here from class 5/5
+def make_planet(planet_details):
+    new_planet = Planet(
+        name=planet_details["name"],
+        description=planet_details["description"]
+    )
+    return new_planet
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet_by_id(planet_id):
@@ -69,18 +79,20 @@ def delete_one_planet(planet_id):
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
 
-    planet = validate_planet(planet_id)
+    planet_to_update = validate_planet(planet_id)
     request_body = request.get_json()
 
     if "name" not in request_body or "description" not in request_body:
         return make_response("Invalid Request", 400)
 
-    planet.name = request_body["name"]
-    planet.description = request_body["description"]
+    planet_to_update.name = request_body["name"]
+    planet_to_update.description = request_body["description"]
 
     db.session.commit()
 
-    return make_response(f"Planet #{planet.id} suscessfully updated")
+    return planet_to_update.to_dict(), 200
+    # Commented out the below, because I saw this refactoring in class today. 
+    #return make_response(f"Planet #{planet.id} suscessfully updated")
 
         
     
