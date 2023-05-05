@@ -75,7 +75,7 @@ def delete_one_planet(planet_id):
     db.session.delete(planet_to_delete)
     db.session.commit()
 
-    return f"Animal #{planet_to_delete.id} successfully deleted", 200
+    return f"Planet #{planet_to_delete.id} successfully deleted", 200
 
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
