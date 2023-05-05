@@ -4,7 +4,7 @@ from flask import Blueprint,jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-def validate_planet(id):
+def validate_planet(model,id):
     model = Planet
     try:
         id = int(id)
@@ -70,7 +70,7 @@ def get_one_planet_by_id(planet_id):
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_one_planet(planet_id):
-    planet_to_delete = validate_planet(planet_id)
+    planet_to_delete = validate_planet(Planet, planet_id)
 
     db.session.delete(planet_to_delete)
     db.session.commit()
@@ -80,7 +80,7 @@ def delete_one_planet(planet_id):
 @planets_bp.route("/<planet_id>", methods=["PUT"])
 def update_planet(planet_id):
 
-    planet_to_update = validate_planet(planet_id)
+    planet_to_update = validate_planet(Planet, planet_id)
     request_body = request.get_json()
 
     if "name" not in request_body or "description" not in request_body:
