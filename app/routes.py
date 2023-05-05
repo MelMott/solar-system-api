@@ -4,7 +4,7 @@ from flask import Blueprint,jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-def validate_planet(model,id):
+def validate_planet(id):
     model = Planet
     try:
         id = int(id)
