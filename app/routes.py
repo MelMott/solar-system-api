@@ -4,16 +4,16 @@ from flask import Blueprint,jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-def validate_planet(planet_id):
+def validate_planet(id):
     try:
-        planet_id = int(planet_id)
+        id = int(id)
     except:
-        abort(make_response({"message":f"Id planet {planet_id} invalid."}, 400))
+        abort(make_response({"message":f"Id planet {id} invalid."}, 400))
 
-    planet = Planet.query.get(planet_id)
+    planet = Planet.query.get(id)
 
     if not planet:
-        return abort(make_response({"message":f"Planet {planet_id} not found."}, 404))
+        return abort(make_response({"message":f"Planet {id} not found."}, 404))
     return planet
 
 @planets_bp.route("", methods=["POST"])
