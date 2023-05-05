@@ -55,9 +55,11 @@ def get_one_planet_by_id(planet_id):
     # Call validate to check if book exists-It returns a book if it exists
     planet = validate_planet(planet_id)
     
-    return {"id": planet.id,
+    animal_data = {"id": planet.id,
             "name": planet.name,
-            "description": planet.description}
+            "description": planet.description
+    }
+    return animal_data, 200
 
 @planets_bp.route("/<planet_id>", methods=["DELETE"])
 def delete_one_planet(planet_id):
