@@ -4,8 +4,8 @@ from flask import Blueprint,jsonify, abort, make_response, request
 
 planets_bp = Blueprint("planets", __name__, url_prefix="/planets")
 
-def validate_planet(id):
-    model = Planet
+# Added model as param to validate_planet. Model receives the Planet class.
+def validate_planet(model, id):
     try:
         id = int(id)
     except:
@@ -21,7 +21,12 @@ def validate_planet(id):
 def create_planet():
     
     request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"], description=request_body["description"])
+
+    # Added this piece for input validation to Post
+    if not "name" in request_body or not "description" in request_body:
+        return make_response({"details": "Invalid data"}, 400)
+
+    new_planet = Planet.from_dict(request_body)
 
     db.session.add(new_planet)
     db.session.commit()
@@ -39,32 +44,19 @@ def read_all_planets():
         planets = Planet.query.all()
     
     planets_response = []
-    
     for planet in planets:
         planets_response.append(planet.to_dict())
-        # Below is what we have previously, I changed it to_dict per lesson)
-        # planets_response.append(
-        #     {
-        #         "id": planet.id,
-        #         "name": planet.name,
-        #         "description": planet.description
-        #     }
-        # )
+
     return jsonify(planets_response), 200
 
-#changes here from class 5/5
-def make_planet(planet_details):
-    new_planet = Planet(
-        name=planet_details["name"],
-        description=planet_details["description"]
-    )
-    return new_planet
+# Deleted the method that was building a planet dict because I was not in use
+# That method is pretty much the same as the one in class planet
 
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet_by_id(planet_id):
 
     # Call validate to check if book exists-It returns a book if it exists
-    planet = validate_planet(planet_id)
+    planet = validate_planet(Planet, planet_id)
     
     return planet.to_dict(), 200
 
@@ -83,8 +75,8 @@ def update_planet(planet_id):
     planet_to_update = validate_planet(Planet, planet_id)
     request_body = request.get_json()
 
-    if "name" not in request_body or "description" not in request_body:
-        return make_response("Invalid Request", 400)
+    # Deleted validation here because it put can modify only a fraction of a record
+    # The validation was not neccesary
 
     planet_to_update.name = request_body["name"]
     planet_to_update.description = request_body["description"]
@@ -92,8 +84,6 @@ def update_planet(planet_id):
     db.session.commit()
 
     return planet_to_update.to_dict(), 200
-    # Commented out the below, because I saw this refactoring in class today. 
-    #return make_response(f"Planet #{planet.id} suscessfully updated")
 
         
     
